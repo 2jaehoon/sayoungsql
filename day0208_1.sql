@@ -12,5 +12,6 @@ insert into test_injection(id, pass, name) values('yoon', 'yoon1234', '윤상준');
 insert into test_injection(id, pass, name) values('park', 'parkjh', '박진호');
 commit;
 
+
 select * from TEST_INJECTION
 where id='' or 1=1 --'kim' and pass='1234';

@@ -35,3 +35,7 @@ values(5,37.5007394, 127.0338101, '마구로센',
 
 
 commit;
+
+
+select num, lat, lng, rest_name, info
+			from map;

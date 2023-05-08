@@ -9,6 +9,15 @@ select * from EPISODE;
 
 select * from MEMBER;
 
+select * from REPORT;
+
+
+
+
+
+update member set stop=sysdate-1
+			where id = 'pha1006';
+
 select * from history;
 
 select * from REPORT;
@@ -117,12 +126,38 @@ order by m.num_member;
 
 
 
-SELECT  m.num_member, m.id, m.join, m.stop, nvl(h.visit, sysdate-373752) visit, m.novelcnt, n.reportcnt
+SELECT  DISTINCT m.num_member, m.id, m.join, nvl(m.stop, sysdate-1) stop, nvl(h.visit, m.join) visit, m.novelcnt, n.reportcnt
 FROM member m
 left Outer JOIN novel n ON m.num_member = n.num_member
 left Outer JOIN report r ON n.num_member = r.num_member
 left Outer JOIN history h ON r.num_member = h.num_member
 order by m.num_member;
+
+
+
+SELECT m.id, m.num_member,  m.join, nvl(m.stop, sysdate-1) stop, nvl(h.visit, m.join) visit, nvl(m.novelcnt, 0) novelcnt
+FROM member m
+left Outer JOIN novel n ON m.num_member = n.num_member
+left Outer JOIN report r ON n.num_member = r.num_member
+left Outer JOIN history h ON r.num_member = h.num_member
+order by m.num_member;
+
+ SELECT m.id, m.num_member, nvl(m.novelcnt, 0) novelcnt,
+ nvl((SELECT MAX(h.visit) FROM history h WHERE m.num_member = h.num_member), m.join) AS visit,
+  m.join, nvl(m.stop, sysdate-1) stop FROM member m;
+
+  (SELECT count() FROM NOVEL n WHERE m.num_member = n.num_member) as a from member m;
+
+  select * from NOVEL;
+
+
+   SELECT m.id, m.num_member,
+  (SELECT COUNT(*) FROM novel where num_member=m.num_member) AS novelcnt,
+  NVL((SELECT MAX(h.visit) FROM history h WHERE m.num_member = h.num_member),m.join) AS visit,
+  m.join, NVL(m.stop, sysdate-1) AS stop FROM member m CROSS JOIN dual;
+
+
+
 
 SELECT *
 FROM member m
@@ -183,9 +218,41 @@ select * from HISTORY;
 
 
 
+select m.id, m.name, m.birth, m.phone, m.email, m.photo, m.join, m.stop,
+						m.novelcnt, count(r.num_report) as report_cnt,
+						h.visit as visitdate 	from member m
+					left join report r on r.id = m.id
+						left join history h on h.num_member = m.num_member 	where m.id = 'pha1006'
+						group by m.id, m.name, m.birth, m.phone, m.email, m.photo, m.join, m.stop,m.novelcnt, h.visit;
+
+
+
+    ALTER TABLE member MODIFY (stop DEFAULT SYSDATE-1);
+
+    select * from MEMBER;
+    commit;
+
+
+   update member set stop
+			=sysdate+60
+			where id = 'pha1006';
+
+
+      select m.id, m.name, m.birth, m.phone, m.email, m.photo, m.join, m.stop,
+			count(r.num_report) as novelcnt, count(r.num_report) as report_cnt,
+						h.visit as visitdate from member m
+						left join report r on r.id = m.id
+						left join history h on h.num_member = m.num_member where m.id = 'jaehun3385';
+
+						   SELECT m.id, m.name, m.birth, m.phone, m.email, m.photo, m.join, m.stop,
+  NVL((SELECT COUNT(*) FROM report where num_member=m.num_member),0) AS report_cnt,
+  nvl((SELECT COUNT(*) FROM novel where num_member=m.num_member),0) AS novelcnt,
+  NVL((SELECT MAX(h.visit) FROM history h WHERE m.num_member = h.num_member),m.join) AS visitdate
+   FROM member m CROSS JOIN dual where m.id='jaehun3385';
+
+  select * from REPORT;
+  select * from NOVEL;
 
 
 
 
-
-, MEMBER, NCNT

@@ -39,3 +39,18 @@ commit;
 
 select num, lat, lng, rest_name, info
 			from map;
+
+			CREATE TABLE minfo2(
+id varchar2(2000),
+password varchar2(2000),
+Cdate date
+
+);
+
+insert into minfo2(id, password, Cdate)
+values('ex1545', 'qp8728',sysdate);
+
+select * from minfo2;
+commit;
+
+select id, Cdate from minfo2 where id = 'ex1545' and password = 'qp8728';

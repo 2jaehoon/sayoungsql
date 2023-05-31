@@ -6,7 +6,9 @@ is
 	cnt number(1) := 0;
 
 begin
-
+	
+	row_cnt := 0;
+	
 	insert into cp_emp(empno, ename, job, sal, deptno,  hiredate)
 	values(empno, ename, job, sal, deptno, sysdate);
 
